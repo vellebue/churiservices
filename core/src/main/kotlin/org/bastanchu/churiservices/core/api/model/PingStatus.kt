@@ -1,14 +1,63 @@
 package org.bastanchu.churiservices.core.api.model
 
-data class PingStatus(var componentName : String,
+import com.fasterxml.jackson.annotation.JsonValue
+import io.swagger.v3.oas.annotations.media.ArraySchema
+import io.swagger.v3.oas.annotations.media.Schema
+
+@Schema(name = "PingStatus",
+        description = "Data Object to describe the running status for a component in our Docker/Kubernetes network.",
+        example = """
+            {
+                "componentName": "churiservices-orders",
+                "componentType": "Spring Boot Application",
+                "version": "1.0-SNAPSHOT",
+                "status": "RUNNING",
+                "timestamp": "2023-12-07 18:21:07 +0100",
+                "dependencies": [
+                    {
+                        "componentName": "churiservices-orders-db",
+                        "componentType": "Postgresql Database",
+                        "version": "15.4",
+                        "status": "RUNNING",
+                        "timestamp": "2023-12-07 18:21:07 +0100",
+                        "dependencies": []
+                    }
+                ]
+            }
+        """)
+data class PingStatus(
+                      @field:Schema(description = "The name of this component", example = "churiservices-orders" , required = true)
+                      var componentName : String,
+                      @field:Schema(description = "The type of this component", type = "PingStatus.ComponentType", example = "Spring Boot Application" , required = true)
+                      var componentType : ComponentType,
+                      @field:Schema(description = "Running version for this component", example = "1.0-SNAPSHOT", required = true)
                       var version : String,
+                      @field:Schema(description = "Running status for this component", type = "PingStatus.Status", example = "RUNNING", required = true)
                       var status: Status,
+                      @field:Schema(description = "Timestamp for this HTTP response", example = "2023-12-07 18:05:09 +0100", required = true)
                       var timestamp: String,
-                      var dependencies : List<PingStatus> = ArrayList<PingStatus>()
+                      @field:ArraySchema(schema = Schema(description = "Related subsystems that are required for this system", required = false))
+                      var dependencies : MutableList<PingStatus> = ArrayList<PingStatus>()
                       )
 {
     enum class Status(val statusName : String) {
         RUNNING("RUNNING"),
-        SHUTDOWN("SHUTDOWN")
+        SHUTDOWN("SHUTDOWN"),
+        NOT_AVAILABLE("NOT AVAILABLE");
+
+        @JsonValue
+        override fun toString() : String {
+            return statusName
+        }
+    }
+
+    enum class ComponentType(val type : String) {
+        SPRING_BOOT_APP("Spring Boot Application"),
+        POSTGRESQL_DB("Postgresql Database");
+
+        @JsonValue
+        override fun toString(): String {
+            return type
+        }
     }
 }
