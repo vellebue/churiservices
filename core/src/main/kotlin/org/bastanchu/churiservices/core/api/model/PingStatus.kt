@@ -26,17 +26,17 @@ import io.swagger.v3.oas.annotations.media.Schema
             }
         """)
 data class PingStatus(
-                      @field:Schema(description = "The name of this component", example = "churiservices-orders" , required = true)
-                      var componentName : String,
-                      @field:Schema(description = "The type of this component", type = "PingStatus.ComponentType", example = "Spring Boot Application" , required = true)
-                      var componentType : ComponentType,
-                      @field:Schema(description = "Running version for this component", example = "1.0-SNAPSHOT", required = true)
-                      var version : String,
-                      @field:Schema(description = "Running status for this component", type = "PingStatus.Status", example = "RUNNING", required = true)
-                      var status: Status,
-                      @field:Schema(description = "Timestamp for this HTTP response", example = "2023-12-07 18:05:09 +0100", required = true)
-                      var timestamp: String,
-                      @field:ArraySchema(schema = Schema(description = "Related subsystems that are required for this system", required = false))
+    @field:Schema(description = "The name of this component", example = "churiservices-orders" , required = true, defaultValue = "")
+                      var componentName : String = "",
+    @field:Schema(description = "The type of this component", type = "PingStatus.ComponentType", example = "Spring Boot Application" , required = true, defaultValue = "Spring Boot Application")
+                      var componentType : ComponentType = ComponentType.SPRING_BOOT_APP,
+    @field:Schema(description = "Running version for this component", example = "1.0-SNAPSHOT", required = true, defaultValue = "")
+                      var version : String = "",
+    @field:Schema(description = "Running status for this component", type = "PingStatus.Status", example = "RUNNING", required = true)
+                      var status: Status = Status.SHUTDOWN,
+    @field:Schema(description = "Timestamp for this HTTP response", example = "2023-12-07 18:05:09 +0100", required = true, defaultValue = "1970-01-01 00:00:00 +0000")
+                      var timestamp: String = "1970-01-01 00:00:00 +0000",
+    @field:ArraySchema(schema = Schema(description = "Related subsystems that are required for this system", required = false))
                       var dependencies : MutableList<PingStatus> = ArrayList<PingStatus>()
                       )
 {
