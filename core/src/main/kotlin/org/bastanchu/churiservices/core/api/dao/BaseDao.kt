@@ -2,7 +2,7 @@ package org.bastanchu.churiservices.core.api.dao
 
 interface  BaseDao<K,E> {
 
-    fun getById(id : K) : E
+    fun getById(id : K) : E?
 
     fun filter(filter : E) : List<E>
 

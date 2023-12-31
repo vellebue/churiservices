@@ -4,6 +4,8 @@ import org.bastanchu.churiservices.core.api.mapper.impl.BaseValueObjectEntityMap
 import org.bastanchu.churiservices.core.api.model.PingStatus
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
+import java.math.BigDecimal
+
 class BaseValueObjectEntityMapperTest {
 
     @Test
@@ -112,7 +114,34 @@ class BaseValueObjectEntityMapperTest {
         assertEquals(valueObject1.timestamp, "2023-12-31 18:21:07 +0100")
     }
 
+    @Test
+    fun `should map from value object to entity with full types configuration`() {
+        val valueObject = FullValueObject(9, "My Test", BigDecimal(7.23))
+        val mapper = FullTestMapper()
+        val entity = FullEntity()
+        mapper.toEntity(valueObject, entity)
+        assertEquals(valueObject.myNumber, entity.myNumber)
+        assertEquals(valueObject.myString, entity.myString)
+        assertEquals(valueObject.myBigDecimal, entity.myBigDecimal)
+    }
+
+    @Test
+    fun `should map from entity to value object with full types configuration`() {
+        val entity = FullEntity(9, "My Test", BigDecimal(7.23))
+        val mapper = FullTestMapper()
+        val valueObject = FullValueObject()
+        mapper.toValueObject(entity, valueObject)
+        assertEquals(entity.myNumber, valueObject.myNumber)
+        assertEquals(entity.myString, valueObject.myString)
+        assertEquals(entity.myBigDecimal, valueObject.myBigDecimal)
+    }
+
     class TestMapper : BaseValueObjectEntityMapperDefaultImpl<PingStatus, PingStatusTestEntity>() {
 
     }
+
+    class FullTestMapper : BaseValueObjectEntityMapperDefaultImpl<FullValueObject, FullEntity>() {
+
+    }
+
 }

@@ -8,7 +8,7 @@ import org.bastanchu.churiservices.core.api.dao.BaseDao
 import java.lang.reflect.Field
 import java.lang.reflect.ParameterizedType
 
-open class BaseDaoImpl<K,E>(open val entityManager: EntityManager) : BaseDao<K,E> {
+abstract class BaseDaoImpl<K,E>(open val entityManager: EntityManager) : BaseDao<K,E> {
 
     var keyClassTypeClass : Class<K>? = null
     var entityClassTypeClass : Class<E>? = null
@@ -20,7 +20,7 @@ open class BaseDaoImpl<K,E>(open val entityManager: EntityManager) : BaseDao<K,E
             entityClassTypeClass = parameterizedType.actualTypeArguments[1] as Class<E>
         }
     }
-    override fun getById(id: K): E {
+    override fun getById(id: K): E? {
         val entity = entityManager.find(entityClassTypeClass, id)
         return entity
     }

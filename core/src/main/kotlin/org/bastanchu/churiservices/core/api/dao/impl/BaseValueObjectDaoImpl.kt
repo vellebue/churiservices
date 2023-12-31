@@ -5,7 +5,7 @@ import org.bastanchu.churiservices.core.api.dao.BaseValueObjectDao
 import org.bastanchu.churiservices.core.api.mapper.ValueObjectEntityMapper
 import java.lang.reflect.ParameterizedType
 
-class BaseValueObjectDaoImpl<K,E,V>(override val entityManager: EntityManager,
+abstract class BaseValueObjectDaoImpl<K,E,V>(override val entityManager: EntityManager,
                                     val valueObjectEntityMapper : ValueObjectEntityMapper<V,E>) :
                                                                                  BaseDaoImpl<K,E>(entityManager) ,
                                                                                  BaseValueObjectDao<K, E, V> {
