@@ -9,6 +9,7 @@
     <modules>
         <module>core</module>
         <module>orders</module>
+        <module>articles</module>
     </modules>
     <packaging>pom</packaging>
     <properties>
