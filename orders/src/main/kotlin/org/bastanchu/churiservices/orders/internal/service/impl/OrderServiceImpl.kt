@@ -21,13 +21,14 @@ class OrderServiceImpl(@Autowired val orderHeaderDao : OrderHeaderDao,
         orderHeaderEntity.deliveryAdress = addressDao.fromValueObjectToEntity(order.deliveryAdress)
         orderHeaderEntity.invoiceAddress = addressDao.fromValueObjectToEntity(order.invoiceAddress)
         var numLine = 0
+        orderHeaderDao.create(orderHeaderEntity)
         order.lines.forEach {
             val orderLineEntity = orderLineDao.fromValueObjectToEntity(it)
+            orderLineEntity.orderId = orderHeaderEntity.orderId
             orderLineEntity.lineId = numLine
             numLine++
             orderHeaderEntity.lines.add(orderLineEntity)
         }
-        orderHeaderDao.create(orderHeaderEntity)
         orderHeaderDao.toValueObject(orderHeaderEntity, order)
     }
 

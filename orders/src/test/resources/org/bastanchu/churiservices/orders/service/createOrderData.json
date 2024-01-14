@@ -1,0 +1,32 @@
+{
+  "customerOrderId": "ACV-7365513",
+  "customerId": "00018122232",
+  "deliveryAdress": {
+    "address": "Calle Mayor 21 Esc. Izq. 9º B",
+    "zipCode": "28922",
+    "city": "Alcorcón",
+    "regionId": "28",
+    "countryId": "ES"
+  },
+  "invoiceAddress": {
+    "address": "Calle Mayor 21 Esc. Izq. 9º B",
+    "zipCode": "28922",
+    "city": "Alcorcón",
+    "regionId": "28",
+    "countryId": "ES"
+  },
+  "baseValue": 3602.10,
+  "vatTaxValue": 360.21,
+  "totalValue":   3960.22,
+  "lines": [
+    {
+      "articleId": "ORTE37553",
+      "articleDescription": "Compaq Laptop Multimedia Series 17\".",
+      "numItems": 3,
+      "basePrice": 1200.700,
+      "vatTax": 120.070,
+      "totalPrice": 1320.770,
+      "totalValue": 3960.220
+    }
+  ]
+}

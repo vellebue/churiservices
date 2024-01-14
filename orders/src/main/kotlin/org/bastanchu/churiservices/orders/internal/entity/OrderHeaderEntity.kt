@@ -12,7 +12,7 @@ data class OrderHeaderEntity(
     @Column(name = "ORDER_ID")
     @GeneratedValue(generator = "SEQ_ORDER")
     @SequenceGenerator(name = "SEQ_ORDER", sequenceName = "SEQ_ORDERS", allocationSize = 1)
-    var orderId : Int = 0,
+    var orderId : Int? = null,
     @Column(name = "CUSTOMER_ORDER_ID")
     var customerOrderId : String = "",
     @Column(name = "CUSTOMER_ID")

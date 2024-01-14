@@ -38,10 +38,14 @@ abstract class BaseValueObjectDaoImpl<K,E,V>(override val entityManager: EntityM
         val unboundEntityInstance = emptyConstructor.newInstance()
         valueObjectEntityMapper.toEntity(valueObject, unboundEntityInstance)
         val entityKey = entityManager.entityManagerFactory.persistenceUnitUtil.getIdentifier(unboundEntityInstance) as K
-        val boundEntity = getById(entityKey)
-        if (boundEntity != null) {
-            valueObjectEntityMapper.toEntity(valueObject, boundEntity)
-            return boundEntity
+        if (entityKey != null) {
+            val boundEntity = getById(entityKey)
+            if (boundEntity != null) {
+                valueObjectEntityMapper.toEntity(valueObject, boundEntity)
+                return boundEntity
+            } else {
+                return unboundEntityInstance
+            }
         } else {
             return unboundEntityInstance
         }

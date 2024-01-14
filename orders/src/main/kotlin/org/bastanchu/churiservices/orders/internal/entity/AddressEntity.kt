@@ -9,7 +9,7 @@ data class AddressEntity(
                     @Column(name = "ADDRESS_ID")
                     @GeneratedValue(generator = "SEQ_ADDRESS")
                     @SequenceGenerator(name = "SEQ_ADDRESS", sequenceName = "SEQ_ADDRESSES", allocationSize = 1)
-                    var addressId : Int = 0,
+                    var addressId : Int? = null,
                     @Column(name = "ADDRESS")
                     var address : String = "",
                     @Column(name = "ZIP_CODE")

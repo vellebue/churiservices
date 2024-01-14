@@ -7,7 +7,7 @@ import java.math.BigDecimal
 
 abstract class BaseValueObjectEntityMapperDefaultImpl<V,E> : ValueObjectEntityMapper<V, E> {
 
-    val BASIC_TYPES = arrayOf(Int::class.java, String::class.java, BigDecimal::class.java)
+    val BASIC_TYPES = arrayOf(Int::class.java, Integer::class.java, String::class.java, BigDecimal::class.java)
 
     val valueObjectClassType = getParameterizedType<V>(0)
     val entityClassType = getParameterizedType<E>(1)

@@ -9,10 +9,10 @@ import java.math.BigDecimal
 class OrderLineEntity(
     @Id
     @Column(name = "ORDER_ID")
-    var orderId : Int = 0,
+    var orderId : Int? = null,
     @Id
     @Column(name = "LINE_ID")
-    var lineId : Int = 0,
+    var lineId : Int? = null,
     @Column(name = "ARTICLE_ID")
     var articleId : String = "",
     @Column(name = "ARTICLE_DESCRIPTION")
@@ -30,8 +30,8 @@ class OrderLineEntity(
 ) {
     override fun equals(other: Any?): Boolean {
         if (other is OrderLineEntity) {
-            return orderId.equals(other.orderId) &&
-                   lineId.equals(other.lineId)
+            return (orderId?.equals(other.orderId) ?: (other.orderId == null)) &&
+                   (lineId?.equals(other.lineId) ?: (other.lineId == null))
         } else {
             return false
         }
