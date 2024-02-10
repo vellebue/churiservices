@@ -6,7 +6,7 @@
 		<groupId>org.bastanchu</groupId>
 		<artifactId>churiservices</artifactId>
 		<version>1.0-SNAPSHOT</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath>..</relativePath> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.bastanchu.churiservices</groupId>
 	<artifactId>orders</artifactId>
@@ -23,6 +23,7 @@
 		<!--native-build-tools-plugin.version>0.9.23</native-build-tools-plugin.version-->
 		<native.maven.plugin.version>0.9.23</native.maven.plugin.version>
 		<skip.integration.tests>true</skip.integration.tests>
+		<module.mainClass>org.bastanchu.churiservices.orders.OrdersApplicationKt</module.mainClass>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -74,21 +75,6 @@
 			<version>${spring.boot.version}</version>
 		</dependency-->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-			<version>${spring.boot.version}</version>
-		</dependency>
-		<!--dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-oauth2-client</artifactId>
-			<version>${spring.boot.version}</version>
-		</dependency-->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
-			<version>${spring.boot.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>4.0.1</version>
@@ -136,7 +122,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<version>${spring.boot.version}</version>
 				<configuration>
-					<mainClass>org.bastanchu.churiservices.orders.OrdersApplicationKt</mainClass>
+					<mainClass>${module.mainClass}</mainClass>
 					<!--executable>true</executable-->
 				</configuration>
 				<executions>
@@ -345,129 +331,5 @@
 				</executions>
 			</plugin>
 		</plugins>
-	</build>
-	<profiles>
-		<profile>
-			<id>native</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.graalvm.buildtools</groupId>
-						<artifactId>native-maven-plugin</artifactId>
-						<version>${native.maven.plugin.version}</version>
-						<extensions>true</extensions>
-						<executions>
-							<execution>
-								<id>build-native</id>
-								<goals>
-									<goal>compile-no-fork</goal>
-								</goals>
-								<phase>package</phase>
-							</execution>
-							<execution>
-								<id>test-native</id>
-								<goals>
-									<goal>test</goal>
-								</goals>
-								<phase>test</phase>
-							</execution>
-						</executions>
-						<configuration>
-							<mainClass>org.bastanchu.churiservices.orders.OrdersApplicationKt</mainClass>
-							<debug>true</debug>
-							<verbose>true</verbose>
-							<buildArgs>
-								<buildArg>--initialize-at-build-time=org.apache.commons.logging.LogFactory,org.apache.commons.logging.LogFactoryService,org.slf4j.MDC,ch.qos.logback.core.pattern.parser.Parser,ch.qos.logback.core.util.Loader,ch.qos.logback.core.util.StatusPrinter,org.slf4j.impl.StaticLoggerBinder,org.slf4j.LoggerFactory,ch.qos.logback.classic.Logger,ch.qos.logback.core.spi.AppenderAttachableImpl,ch.qos.logback.core.status.StatusBase,ch.qos.logback.classic.Level,ch.qos.logback.core.status.InfoStatus,ch.qos.logback.classic.PatternLayout,ch.qos.logback.core.CoreConstants,org.flywaydb.core.internal.scanner.Scanner</buildArg>
-								<buildArg>-H:+ReportExceptionStackTraces</buildArg>
-							</buildArgs>
-						</configuration>
-					</plugin>
-					<plugin>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-maven-plugin</artifactId>
-						<configuration>
-							<image>
-								<builder>paketobuildpacks/builder:tiny</builder>
-								<env>
-									<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
-								</env>
-							</image>
-						</configuration>
-						<executions>
-							<execution>
-								<id>process-aot</id>
-								<goals>
-									<goal>process-aot</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.graalvm.buildtools</groupId>
-						<artifactId>native-maven-plugin</artifactId>
-						<configuration>
-							<classesDirectory>${project.build.outputDirectory}</classesDirectory>
-							<metadataRepository>
-								<enabled>true</enabled>
-							</metadataRepository>
-							<requiredVersion>22.3</requiredVersion>
-						</configuration>
-						<executions>
-							<execution>
-								<id>add-reachability-metadata</id>
-								<goals>
-									<goal>add-reachability-metadata</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>nativeTest</id>
-			<dependencies>
-				<dependency>
-					<groupId>org.junit.platform</groupId>
-					<artifactId>junit-platform-launcher</artifactId>
-					<scope>test</scope>
-				</dependency>
-			</dependencies>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-maven-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>process-test-aot</id>
-								<goals>
-									<goal>process-test-aot</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.graalvm.buildtools</groupId>
-						<artifactId>native-maven-plugin</artifactId>
-						<configuration>
-							<classesDirectory>${project.build.outputDirectory}</classesDirectory>
-							<metadataRepository>
-								<enabled>true</enabled>
-							</metadataRepository>
-							<requiredVersion>22.3</requiredVersion>
-						</configuration>
-						<executions>
-							<execution>
-								<id>native-test</id>
-								<goals>
-									<goal>test</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+	</build>	
 </project>

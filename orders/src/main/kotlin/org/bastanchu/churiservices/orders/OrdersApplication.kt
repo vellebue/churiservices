@@ -7,7 +7,7 @@ import org.springframework.boot.runApplication
 
 @SpringBootApplication
 @OpenAPIDefinition(info = Info(title = "Churiservices Orders API.",
-	                           version = "3.0",
+	                           version = "1.0",
 	                           description = "This is the Orders API to operate into churiservices environment."))
 class OrdersApplication
 

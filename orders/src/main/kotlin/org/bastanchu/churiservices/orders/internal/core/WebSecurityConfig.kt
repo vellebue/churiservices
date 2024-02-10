@@ -1,5 +1,6 @@
 package org.bastanchu.churiservices.orders.internal.core
 
+import org.bastanchu.churiservices.core.api.BaseWebSecurityConfig
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.Customizer
@@ -11,19 +12,10 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
-class WebSecurityConfig {
+class WebSecurityConfig : BaseWebSecurityConfig() {
 
     @Bean
-    fun securityFilterChain(httpSecurity : HttpSecurity) : SecurityFilterChain {
-        httpSecurity.cors { it.disable() }
-        httpSecurity.csrf { it.disable() }
-        httpSecurity.authorizeHttpRequests {
-                                             it.requestMatchers("/swagger-ui/**").permitAll()
-                                               .requestMatchers("/v*/api-docs/**").permitAll()
-                                               .anyRequest().authenticated()
-                                            }
-        httpSecurity.sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-        httpSecurity.oauth2ResourceServer { it.jwt(Customizer.withDefaults()) }
-        return httpSecurity.build()
+    override fun securityFilterChain(httpSecurity : HttpSecurity) : SecurityFilterChain {
+        return super.securityFilterChain(httpSecurity)
     }
 }
