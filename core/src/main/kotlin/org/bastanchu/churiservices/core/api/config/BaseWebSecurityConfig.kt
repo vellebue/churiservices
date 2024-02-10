@@ -1,4 +1,4 @@
-package org.bastanchu.churiservices.core.api
+package org.bastanchu.churiservices.core.api.config
 
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity

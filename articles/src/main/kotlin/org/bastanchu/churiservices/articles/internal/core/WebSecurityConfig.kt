@@ -1,6 +1,6 @@
-package org.bastanchu.churiservices.articles.api.core
+package org.bastanchu.churiservices.articles.internal.core
 
-import org.bastanchu.churiservices.core.api.BaseWebSecurityConfig
+import org.bastanchu.churiservices.core.api.config.BaseWebSecurityConfig
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
