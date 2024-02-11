@@ -1,16 +1,9 @@
 package org.bastanchu.churiservices.orders.internal.service
 
 import org.bastanchu.churiservices.core.api.model.PingStatus
-import org.bastanchu.churiservices.core.api.model.security.User
+import org.bastanchu.churiservices.core.api.service.BaseSystemService
 
-interface SystemService {
-
-    fun getSystemPingStatus() : PingStatus
+interface SystemService : BaseSystemService {
 
     fun getPostgresqlPingStatus() : PingStatus
-
-    fun getFullSystemPingStatus() : PingStatus
-
-    fun getUserDetails() : User
-
 }
