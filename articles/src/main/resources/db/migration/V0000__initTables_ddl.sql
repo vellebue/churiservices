@@ -3,10 +3,15 @@ create table COUNTRIES(COUNTRY_ID VARCHAR(2) PRIMARY KEY,
 
 create table ARTICLES(ARTICLE_ID VARCHAR(20) PRIMARY KEY,
                       DESCRIPTION VARCHAR(256) NOT NULL,
-                      COST_FARE DECIMAL(15,3) NOT NULL,
-                      SALE_FARE DECIMAL(15,3) NOT NULL,
-                      VAT_TYPE VARCHAR(2) NOT NULL,
                       COUNTRY_ID VARCHAR(2) NOT NULL REFERENCES COUNTRIES(COUNTRY_ID));
+
+create table PRICING_CONDITIONS(ARTICLE_ID VARCHAR(20) NOT NULL REFERENCES ARTICLES(ARTICLE_ID),
+                                TYPE VARCHAR(20),
+                                SUBTYPE VARCHAR(20),
+                                NUM_ORDER INTEGER,
+                                VALUE_TYPE VARCHAR(20),
+                                VALUE DECIMAL(19,4),
+                                PRIMARY KEY (ARTICLE_ID, TYPE, SUBTYPE));
 
 create table FORMATS(FORMAT_ID VARCHAR(5) PRIMARY KEY,
                      DESCRIPTION VARCHAR(256) NOT NULL);

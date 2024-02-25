@@ -9,6 +9,10 @@ class ArticlePricingCondition(@field:Schema(description = "Pricing condition typ
                                             example = "FARE",
                                             required = true)
                               val type : PricingConditionType,
+                              @field:Schema(description = "Pricing condition subtype",
+                                            example = "IGIC",
+                                            required = false)
+                              val subtype : String = "",
                               @field:Schema(description = """Order to evaluate pricing condition:
                                   | pricing conditions are evaluated in ascending order according to this
                                   | indicator. Relative conditions are refered to less (strict) inmediate 
@@ -32,6 +36,7 @@ class ArticlePricingCondition(@field:Schema(description = "Pricing condition typ
 
     enum class PricingConditionType(val type : String) {
         FARE("FARE"),
+        TAX("TAX"),
         VAT_TAX("VAT_TAX"),
         LINE_DISCOUNT("LINE_DISCOUNT");
 
