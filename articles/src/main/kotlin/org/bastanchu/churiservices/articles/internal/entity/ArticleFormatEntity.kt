@@ -1,8 +1,6 @@
 package org.bastanchu.churiservices.articles.internal.entity
 
 import jakarta.persistence.*
-import org.apache.commons.lang3.Conversion
-import org.bastanchu.churiservices.core.api.model.article.Article
 
 @Entity
 @Table(name = "ARTICLE_FORMATS")

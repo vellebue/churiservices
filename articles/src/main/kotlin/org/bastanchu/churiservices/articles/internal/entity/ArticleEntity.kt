@@ -1,9 +1,6 @@
 package org.bastanchu.churiservices.articles.internal.entity
 
 import jakarta.persistence.*
-import org.bastanchu.churiservices.core.api.model.addresses.Country
-import org.bastanchu.churiservices.core.api.model.article.ArticlePricingCondition
-import org.springframework.context.annotation.Description
 
 @Entity
 @Table(name = "ARTICLES")
