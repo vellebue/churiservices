@@ -2,7 +2,7 @@
 <configuration>
 
     <property name="LOG_ROOT" value="." />
-    <property name="LOG_FILE_NAME" value="churiservices-orders" />
+    <property name="LOG_FILE_NAME" value="churiservices-articles" />
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type

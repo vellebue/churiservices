@@ -99,6 +99,7 @@ class FormatController(@Autowired val formatService: FormatService,
                    )
                ])
     @GetMapping("/formats/format/{formatId}")
+    @ResponseStatus(HttpStatus.OK)
     fun getFormat(@PathVariable formatId : String) : ResponseEntity<Any> {
         val format = formatService.getFormat(formatId)
         if (format != null) {

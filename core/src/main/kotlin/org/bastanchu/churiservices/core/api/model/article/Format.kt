@@ -8,9 +8,9 @@ data class Format(
                   @field:Schema(description = "Format Id unique identificator.",
                                 example = "UN",
                                 required = true)
-                  val formatId : String = "",
+                  var formatId : String = "",
                   @field:Schema(description = "Format Id description",
                                 example = "Single unit format.",
                                 required = true)
-                  val description : String = "") {
+                  var description : String = "") {
 }

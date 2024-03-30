@@ -6,5 +6,7 @@ interface ArticleService {
 
     fun createArticle(article : Article) : Article
 
-    fun getArticle(articleId : String)
+    fun getArticle(articleId : String) : Article?
+
+    fun getArticles() : List<Article>
 }

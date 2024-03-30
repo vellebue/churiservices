@@ -7,7 +7,7 @@ import java.math.BigDecimal
 
 abstract class BaseValueObjectEntityMapperDefaultImpl<V,E> : ValueObjectEntityMapper<V, E> {
 
-    val BASIC_TYPES = arrayOf(Int::class.java, Integer::class.java, String::class.java, BigDecimal::class.java)
+    val BASIC_TYPES = arrayOf(Int::class.java, Integer::class.java, String::class.java, BigDecimal::class.java, Boolean::class.java)
 
     val valueObjectClassType = getParameterizedType<V>(0)
     val entityClassType = getParameterizedType<E>(1)
@@ -50,18 +50,37 @@ abstract class BaseValueObjectEntityMapperDefaultImpl<V,E> : ValueObjectEntityMa
             if (candidateSourceField != null)
                 if ((BASIC_TYPES.filter { candidateSourceField.type.isAssignableFrom(it) }.size > 0) ||
                     candidateSourceField.type.isEnum) {
-                    //Is basic type or enum
-                    candidateSourceField.trySetAccessible()
-                    val value = candidateSourceField.get(source)
-                    targetField.trySetAccessible()
-                    targetField.set(target, value)
+                    if (candidateSourceField.type.isEnum && targetField.type.isAssignableFrom(String::class.java)) {
+                        // Turn enum into String
+                        candidateSourceField.trySetAccessible()
+                        val value = candidateSourceField.get(source)
+                        targetField.trySetAccessible()
+                        targetField.set(target, fromEnumToEstring(value))
+                    } else if (candidateSourceField.type.isAssignableFrom(String::class.java) && targetField.type.isEnum) {
+                        // Turn String into enum
+                        candidateSourceField.trySetAccessible()
+                        val value = candidateSourceField.get(source) as String
+                        targetField.trySetAccessible()
+                        targetField.set(target, fromStringToEnumValue(value, targetField.type))
+                    } else {
+                        //Is basic type or enum source and enum target are the same type
+                        candidateSourceField.trySetAccessible()
+                        val value = candidateSourceField.get(source)
+                        targetField.trySetAccessible()
+                        targetField.set(target, value)
+                    }
                 }
         }
     }
 
     fun getMatchingField(sourceField : Field, targetClass : Class<*>) : Field? {
         val targetFieldList = targetClass.declaredFields.filter {
-            (it.name == sourceField.name) && it.type.isAssignableFrom(sourceField.type)
+            (it.name == sourceField.name) && (
+                    it.type.isAssignableFrom(sourceField.type) ||
+                            ( (it.type.isAssignableFrom(String::class.java) && sourceField.type.isEnum) ||
+                              (it.type.isEnum && sourceField.type.isAssignableFrom(String::class.java))
+                            )
+                    )
         }
         if (targetFieldList.size > 0) {
             return targetFieldList[0]
@@ -77,6 +96,24 @@ abstract class BaseValueObjectEntityMapperDefaultImpl<V,E> : ValueObjectEntityMa
             return parameterizedType.actualTypeArguments[order] as Class<T>
         } else {
             throw ClassNotFoundException("No parameterized class defined (this may not happen)")
+        }
+    }
+
+    fun <E> fromEnumToEstring(enumValue : E) : String {
+        return enumValue.toString()
+    }
+
+    fun <E> fromStringToEnumValue(value : String, enumClass : Class<E>) : E? {
+        if (enumClass.isEnum) {
+            val enumValues = enumClass.enumConstants
+            try {
+                val enumValue = enumValues.filter { it.toString().equals(value) }.first
+                return enumValue
+            } catch (e: NoSuchElementException) {
+                return null
+            }
+        } else {
+            return null;
         }
     }
 }

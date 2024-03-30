@@ -28,6 +28,7 @@ create table ORDER_HEADERS(ORDER_ID INTEGER PRIMARY KEY,
                            BASE_VALUE DECIMAL(14,2) NOT NULL DEFAULT 0,
                            VAT_TAX_VALUE DECIMAL(14,2) NOT NULL DEFAULT 0,
                            TOTAL_VALUE DECIMAL(14,2) NOT NULL DEFAULT 0);
+
 create sequence SEQ_ORDERS
     increment by 1
     minvalue 0
