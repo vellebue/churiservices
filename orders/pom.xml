@@ -98,7 +98,7 @@
 
 	<build>
 
-		<!--To inject maven properties into spring application.properties -->
+		<!--To inject maven properties into spring application.yml -->
 		<resources>
 			<resource>
 				<filtering>true</filtering>

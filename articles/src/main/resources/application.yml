@@ -1,0 +1,34 @@
+management:
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+
+jdbc:
+  churierpweb:
+    driver: org.postgresql.Driver
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:6961/churiservices_articles
+    username: churiservices_articles
+    password: angel7
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8000/auth/realms/ChuriservicesRealm/protocol/openid-connect/certs
+#spring.jpa.show-sql=true
+#spring.jpa.properties.hibernate.format_sql=true
+
+#spring.jpa.properties.hibernate.dialect= org.hibernate.dialect.PostgreSQLDialect
+
+org:
+  bastanchu:
+    churiservices:
+      timestampFormat: yyyy-MM-dd HH:mm:ss Z
+      articles:
+        systemName: churiservices-articles
+        systemVersion: @project.version@
+        dbSystemName: churiservices-articles-db
+
