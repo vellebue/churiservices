@@ -8,6 +8,9 @@ jdbc:
   churierpweb:
     driver: org.postgresql.Driver
 
+server:
+  port: 7080
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:6960/churiservices_orders
