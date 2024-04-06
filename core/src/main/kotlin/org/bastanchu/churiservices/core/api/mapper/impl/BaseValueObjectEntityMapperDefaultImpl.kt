@@ -107,7 +107,7 @@ abstract class BaseValueObjectEntityMapperDefaultImpl<V,E> : ValueObjectEntityMa
         if (enumClass.isEnum) {
             val enumValues = enumClass.enumConstants
             try {
-                val enumValue = enumValues.filter { it.toString().equals(value) }.first
+                val enumValue = enumValues.filter { it.toString().equals(value) }.first()
                 return enumValue
             } catch (e: NoSuchElementException) {
                 return null
