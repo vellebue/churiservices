@@ -30,7 +30,11 @@ org:
   bastanchu:
     churiservices:
       timestampFormat: yyyy-MM-dd HH:mm:ss Z
-      articles:
+      system:
+        baseTokenURL: http://localhost:8000/auth/realms/ChuriservicesRealm//protocol/openid-connect/token
+      orders:
         systemName: churiservices-orders
         systemVersion: @project.version@
         dbSystemName: churiservices-orders-db
+      articles:
+        baseURL: http://localhost:7081/

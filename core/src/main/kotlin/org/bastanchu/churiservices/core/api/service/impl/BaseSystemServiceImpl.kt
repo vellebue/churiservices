@@ -1,17 +1,21 @@
 package org.bastanchu.churiservices.core.api.service.impl
 
+import org.bastanchu.churiservices.core.api.config.component.Slf4jInterceptor
 import org.bastanchu.churiservices.core.api.model.PingStatus
 import org.bastanchu.churiservices.core.api.model.security.Role
 import org.bastanchu.churiservices.core.api.model.security.Token
 import org.bastanchu.churiservices.core.api.model.security.User
 import org.bastanchu.churiservices.core.api.service.BaseSystemService
+import org.slf4j.MDC
+import org.springframework.core.env.Environment
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.jwt.Jwt
+import org.springframework.web.client.RestClient
 import java.sql.Timestamp
 import java.text.DateFormat
 import java.util.*
 
-abstract class BaseSystemServiceImpl : BaseSystemService {
+abstract class BaseSystemServiceImpl() : BaseSystemService {
 
     abstract fun getComponentName(): String
 
@@ -67,5 +71,15 @@ abstract class BaseSystemServiceImpl : BaseSystemService {
             issuer = clientIssuer
         )
         return User(login = login, name = name, email = email, type = userType, token = token, roles = targetRolesList)
+    }
+
+    override fun getTokenInUse(): Token {
+        val user = getUserDetails()
+        return user.token
+    }
+
+    override fun getCurrentCorrelationId(): String {
+        val correlationId = MDC.get(Slf4jInterceptor.correlationIdHeader) ?: ""
+        return correlationId
     }
 }

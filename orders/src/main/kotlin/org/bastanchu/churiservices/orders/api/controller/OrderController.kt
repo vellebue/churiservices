@@ -9,7 +9,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 
 import org.bastanchu.churiservices.core.api.model.orders.OrderHeader
 import org.bastanchu.churiservices.core.api.service.exception.ItemNotFoundException
+import org.bastanchu.churiservices.orders.internal.service.AssessmentOrderService
 import org.bastanchu.churiservices.orders.internal.service.OrderService
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.env.Environment
 import org.springframework.http.HttpStatus
@@ -22,7 +24,9 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class OrderController(@Autowired val orderService : OrderService,
-                      @Autowired val environment: Environment) {
+                      @Autowired val assessmentOrderService: AssessmentOrderService) {
+
+    val logger = LoggerFactory.getLogger(OrderController::class.java)
 
     @Operation(
         summary = "Creates an orden given its header deatils, delivery address, invoice address and order line items required.",
@@ -230,5 +234,13 @@ class OrderController(@Autowired val orderService : OrderService,
         } else {
             throw ItemNotFoundException("Order with order id ${orderId} not found")
         }
-     }
+    }
+
+    @GetMapping("/orders/assessOrder")
+    @ResponseStatus(HttpStatus.OK)
+    fun assessOrder(@org.springframework.web.bind.annotation.RequestBody orderHeader: OrderHeader) : OrderHeader {
+        logger.info("Performing order assessment")
+        assessmentOrderService.assessOrder(orderHeader)
+        return orderHeader
+    }
 }

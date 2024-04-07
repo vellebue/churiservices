@@ -10,8 +10,11 @@ import java.util.UUID
 
 class Slf4jInterceptor : HandlerInterceptor {
 
-    val correlationIdHeader = "X-CORRELATION-ID"
-    val transactionIdHeader = "X-TRANSACTION-ID"
+    companion object {
+        val correlationIdHeader = "X-CORRELATION-ID"
+        val transactionIdHeader = "X-TRANSACTION-ID"
+    }
+
     val correlationIdLogAttribute = "correlationId"
     val transactionIdLogAttribute = "transactionId"
 
