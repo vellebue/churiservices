@@ -11,6 +11,8 @@ import org.springframework.core.env.Environment
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.client.RestClient
+import org.springframework.web.context.request.RequestAttributes
+import org.springframework.web.context.request.RequestContextHolder
 import java.sql.Timestamp
 import java.text.DateFormat
 import java.util.*
@@ -79,7 +81,9 @@ abstract class BaseSystemServiceImpl() : BaseSystemService {
     }
 
     override fun getCurrentCorrelationId(): String {
-        val correlationId = MDC.get(Slf4jInterceptor.correlationIdHeader) ?: ""
+        val requestAttributes = RequestContextHolder.getRequestAttributes()
+        val correlationId = requestAttributes
+            .getAttribute(Slf4jInterceptor.correlationIdLogAttribute, RequestAttributes.SCOPE_REQUEST) as String? ?: ""
         return correlationId
     }
 }

@@ -3,6 +3,8 @@ package org.bastanchu.churiservices.core.api.config.component
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.MDC
+import org.springframework.web.context.request.RequestAttributes
+import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.servlet.ModelAndView
 import java.lang.Exception
@@ -13,10 +15,9 @@ class Slf4jInterceptor : HandlerInterceptor {
     companion object {
         val correlationIdHeader = "X-CORRELATION-ID"
         val transactionIdHeader = "X-TRANSACTION-ID"
+        val correlationIdLogAttribute = "correlationId"
+        val transactionIdLogAttribute = "transactionId"
     }
-
-    val correlationIdLogAttribute = "correlationId"
-    val transactionIdLogAttribute = "transactionId"
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
         val correlationId = getOrGenerateCorrelationId(request)
@@ -25,6 +26,9 @@ class Slf4jInterceptor : HandlerInterceptor {
         response.setHeader(transactionIdHeader, transactionId)
         MDC.put(correlationIdLogAttribute, correlationId)
         MDC.put(transactionIdLogAttribute, transactionId)
+        val requestAttributes = RequestContextHolder.getRequestAttributes()
+        requestAttributes.setAttribute(correlationIdLogAttribute, correlationId, RequestAttributes.SCOPE_REQUEST)
+        requestAttributes.setAttribute(transactionIdLogAttribute, transactionId, RequestAttributes.SCOPE_REQUEST)
         return true
     }
 
