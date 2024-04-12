@@ -1,0 +1,40 @@
+{
+  "articleId" : "COMPQ0019",
+  "description" : "Compq computer 19''",
+  "country" : "ES",
+  "articleConditions" : [
+    {
+      "type": "FARE",
+      "order" : 1,
+      "valueType" : "VALUE",
+      "value" : 1500.0
+    },
+    {
+      "type": "VAT_TAX",
+      "subtype" : "NR",
+      "order" : 90,
+      "valueType" : "PERCENTAGE",
+      "value" : 10.0
+    }
+  ],
+  "articleFormats" : [
+    {
+      "formatId" : "NE",
+      "description" : "Non existing article format.",
+      "eanCode" : "87613456197",
+      "eanType" : "EAN11",
+      "minUnit" : true,
+      "saleUnit" : true,
+      "conversionFactor" : 1.0
+    },
+    {
+      "formatId" : "CS",
+      "description" : "Retail Box of Compq computer single laptop 18''",
+      "eanCode" : "1197562765286",
+      "eanType" : "EAN13",
+      "minUnit" : false,
+      "saleUnit" : true,
+      "conversionFactor" : 4.0
+    }
+  ]
+}

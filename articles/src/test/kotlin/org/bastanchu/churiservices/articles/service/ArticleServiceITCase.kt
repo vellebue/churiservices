@@ -116,6 +116,18 @@ class ArticleServiceITCase(@Autowired val articleService: ArticleService,
     }
 
     @Test
+    fun `should fail when creating article with unregistered article formats`() {
+        val classLoader = Thread.currentThread().contextClassLoader
+        val stream = classLoader.getResourceAsStream("org/bastanchu/churiservices/articles/service/createArticleWithNonExistingArticleFormats.json")
+        stream.use {
+            val article = objectMapper.readValue(it, Article::class.java)
+            assertThrows(ServiceException::class.java) {
+                articleService.createArticle(article)
+            }
+        }
+    }
+
+    @Test
     fun `should create an article properly`() {
         val classLoader = Thread.currentThread().contextClassLoader
         val stream = classLoader.getResourceAsStream("org/bastanchu/churiservices/articles/service/createArticleData.json")
