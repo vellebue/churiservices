@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.springframework.beans.factory.annotation.Autowired
 import java.math.BigDecimal
 import javax.sql.DataSource
+import kotlin.test.assertFailsWith
 
 class ArticleServiceITCase(@Autowired val articleService: ArticleService,
                            @Autowired val objectMapper : ObjectMapper) :BaseITCase() {
@@ -107,24 +108,26 @@ class ArticleServiceITCase(@Autowired val articleService: ArticleService,
     fun `should fail when creating repeated article`() {
         val classLoader = Thread.currentThread().contextClassLoader
         val stream = classLoader.getResourceAsStream("org/bastanchu/churiservices/articles/service/createExistingArticleData.json")
-        stream.use {
-            val article = objectMapper.readValue(it, Article::class.java)
-            assertThrows(ServiceException::class.java) {
+        val exception = assertFailsWith<ServiceException> {
+            stream.use {
+                val article = objectMapper.readValue(it, Article::class.java)
                 articleService.createArticle(article)
             }
         }
+        assertEquals("Article with id COMPQ0017 already exists.", exception.message)
     }
 
     @Test
     fun `should fail when creating article with unregistered article formats`() {
         val classLoader = Thread.currentThread().contextClassLoader
         val stream = classLoader.getResourceAsStream("org/bastanchu/churiservices/articles/service/createArticleWithNonExistingArticleFormats.json")
-        stream.use {
-            val article = objectMapper.readValue(it, Article::class.java)
-            assertThrows(ServiceException::class.java) {
+        val exception = assertFailsWith<ServiceException> {
+            stream.use {
+                val article = objectMapper.readValue(it, Article::class.java)
                 articleService.createArticle(article)
             }
         }
+        assertEquals("Cannot create article COMPQ0019. These referred article formats are not registered [NE]", exception.message)
     }
 
     @Test
