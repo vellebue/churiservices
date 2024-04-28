@@ -18,6 +18,7 @@ import org.springframework.boot.test.util.TestPropertyValues
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.context.junit4.SpringRunner
 import org.testcontainers.containers.PostgreSQLContainer
@@ -33,6 +34,7 @@ import javax.sql.DataSource
 @ContextConfiguration(classes = [ApplicationContextConfiguration::class],
     initializers = [BaseITCase.Companion.Initializer::class] ,
     value = arrayOf("classpath:test-context.xml"))
+@TestPropertySource(properties = arrayOf("org.bastanchu.churiservices.executionMode=test"))
 abstract class BaseITCase {
 
     class MyPostgresqlContainer(dockerImageName : String) : PostgreSQLContainer<MyPostgresqlContainer>(dockerImageName)

@@ -5,8 +5,7 @@ import java.math.BigDecimal
 
 @Schema(name = "OrderLine",
         description = "Data structure to describe order lines that include items required.")
-data class OrderLine(
-                     @field:Schema(description = "Article Id. to identify required item",
+data class OrderLine(@field:Schema(description = "Article Id. to identify required item",
                                        example = "ORTE37553" ,
                                       required = true)
                      var articleId : String = "",
@@ -18,6 +17,10 @@ data class OrderLine(
                                        example = "3" ,
                                       required = true)
                      var numItems : Int = 0,
+                     @field:Schema(description = "Format measure unit for this article line",
+                         example = "UN" ,
+                         required = true)
+                     var formatUnit : String = "",
                      @field:Schema(description = "Base price for a unit of this article.",
                                        example = "1200.70" ,
                                       required = true)
@@ -30,8 +33,19 @@ data class OrderLine(
                                        example = "1320.77" ,
                                       required = true)
                      var totalPrice : BigDecimal = BigDecimal(0),
+                     @field:Schema(description = "Base value for all units for this article.",
+                         example = "2401.40" ,
+                         required = true)
+                     var baseValue : BigDecimal = BigDecimal(0),
+                     @field:Schema(description = "VAT tax value for all units for this article.",
+                         example = "240.14" ,
+                         required = true)
+                     var vatTaxValue : BigDecimal = BigDecimal(0),
                      @field:Schema(description = "Total gross value for this line.",
                                        example = "3960.22" ,
                                       required = true)
-                     var totalValue : BigDecimal = BigDecimal(0)) {
+                     var totalValue : BigDecimal = BigDecimal(0),
+                     @field:Schema(description = "Order line pricing conditions scale",
+                                   required = true)
+                     var conditions : List<OrderLinePricingCondition> = ArrayList()) {
 }

@@ -29,6 +29,7 @@ spring:
 org:
   bastanchu:
     churiservices:
+      executionMode: real
       timestampFormat: yyyy-MM-dd HH:mm:ss Z
       system:
         baseTokenURL: http://localhost:8000/auth/realms/ChuriservicesRealm//protocol/openid-connect/token

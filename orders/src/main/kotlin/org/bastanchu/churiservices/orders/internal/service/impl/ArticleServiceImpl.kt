@@ -5,6 +5,7 @@ import org.bastanchu.churiservices.core.api.model.article.Article
 import org.bastanchu.churiservices.orders.internal.service.ArticleService
 import org.bastanchu.churiservices.orders.internal.service.SystemService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.core.env.Environment
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
@@ -13,6 +14,7 @@ import org.springframework.web.client.RestClient
 
 @Service
 @Transactional(value = "transactionManager", propagation = Propagation.REQUIRED)
+@ConditionalOnProperty(name = arrayOf("org.bastanchu.churiservices.executionMode"), havingValue = "real")
 class ArticleServiceImpl(@Autowired val environment : Environment,
                          @Autowired val systemService: SystemService) : ArticleService {
 

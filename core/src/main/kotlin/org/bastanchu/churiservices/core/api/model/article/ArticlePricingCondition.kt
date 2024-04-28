@@ -6,7 +6,7 @@ import java.math.BigDecimal
 
 @Schema(name = "ArticlePricingCondition",
         description = "Article Pricing Condition required to calculate article value.")
-class ArticlePricingCondition(@field:Schema(description = "Pricing condition type (Fare, Tax, Discount...).",
+data class ArticlePricingCondition(@field:Schema(description = "Pricing condition type (Fare, Tax, Discount...).",
                                             example = "FARE",
                                             required = true)
                               var type : PricingConditionType = PricingConditionType.FARE,

@@ -1,0 +1,29 @@
+{
+  "customerOrderId": "NIA-3127172",
+  "customerId": "00018122232",
+  "deliveryAdress": {
+    "address": "Calle Mayor 21 Esc. Izq. 9º B",
+    "zipCode": "28922",
+    "city": "Alcorcón",
+    "regionId": "28",
+    "regionName": "MADRID",
+    "countryId": "ES",
+    "countryName": "Spain"
+  },
+  "invoiceAddress": {
+    "address": "Calle Mayor 21 Esc. Izq. 9º B",
+    "zipCode": "28922",
+    "city": "Alcorcón",
+    "regionId": "28",
+    "regionName": "MADRID",
+    "countryId": "ES",
+    "countryName": "Spain"
+  },
+  "lines": [
+    {
+      "articleId": "NOTEXIST",
+      "numItems": 3,
+      "formatUnit": "CS"
+    }
+  ]
+}

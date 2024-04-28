@@ -15,6 +15,7 @@ import org.springframework.orm.jpa.JpaTransactionManager
 import org.springframework.orm.jpa.JpaVendorAdapter
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter
+import org.springframework.test.context.TestPropertySource
 import org.springframework.transaction.PlatformTransactionManager
 import org.springframework.transaction.annotation.EnableTransactionManagement
 import java.beans.PropertyVetoException
@@ -32,6 +33,8 @@ open class ApplicationContextConfiguration(@Autowired val environment: Environme
 
     init {
         logger.info("Starting ApplicationContextConfiguration")
+        logger.info("Property org.bastanchu.churiservices.executionMode " +
+                    "value ${environment.getProperty("org.bastanchu.churiservices.executionMode")}")
     }
 
     @Bean(name = ["dataSource"])
