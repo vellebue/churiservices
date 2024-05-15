@@ -25,8 +25,23 @@
         </encoder>
     </appender-->
 
+    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <http>
+            <url>http://localhost:3100/loki/api/v1/push</url>
+        </http>
+        <format>
+            <label>
+                <pattern>app=churiservices-articles,environment=dev</pattern>
+            </label>
+            <message>
+                <pattern>[%highlight(%-5level)] %d{HH:mm:ss.SSS} [%X{correlationId}]  %logger{36} - %msg%n</pattern>
+            </message>
+        </format>
+    </appender>
+
     <root level="info">
         <appender-ref ref="STDOUT" />
         <!--appender-ref ref="FILE" /-->
+        <appender-ref ref="LOKI" />
     </root>
 </configuration>
