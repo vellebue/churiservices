@@ -13,6 +13,7 @@ open class BaseWebSecurityConfig {
         httpSecurity.authorizeHttpRequests {
             it.requestMatchers("/swagger-ui/**").permitAll()
                     .requestMatchers("/v*/api-docs/**").permitAll()
+                    .requestMatchers("/ping").permitAll()
                     .anyRequest().authenticated()
         }
         httpSecurity.sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }

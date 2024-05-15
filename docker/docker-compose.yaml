@@ -33,6 +33,14 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
     networks:
       - churisevices-net
+ # churiservices-articles:
+ #   image: articles:1.0-SNAPSHOT
+ #   ports:
+ #     - 7081:7081
+ #   expose:
+ #     - "7081"
+ #   networks:
+ #     - churisevices-net
   #--SYSTEM--
   #KEYCLOAK
   churiservices-system-keycloak-db:
@@ -61,10 +69,21 @@ services:
       #JDBC_PARAMS: "ssl=true"
     ports:
       - 8000:8080
+    expose:
+      - "8080"
     depends_on:
       - churiservices-system-keycloak-db
     networks:
       - churisevices-net
+  #CONSUL
+# churiservices-system-consul:
+#   image: hashicorp/consul:1.18
+#   ports:
+#     - 8500:8500
+#   expose:
+#     - "8500"
+#   networks:
+#     - churisevices-net
 volumes:
   churiservices-orders-db-volume:
   churiservices-articles-db-volume:

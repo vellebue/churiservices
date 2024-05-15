@@ -21,6 +21,27 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: http://localhost:8000/auth/realms/ChuriservicesRealm/protocol/openid-connect/certs
+# cloud:
+#   consul:
+#     discovery:
+#       service-name: churiservices-articles
+#       instance-id: churiservices-articles
+#       enabled: true
+#       register: true
+#       prefer-ip-address: true
+#       register-health-check: true
+#       prefer-agent-address: true
+#       health-check-url: http://localhost:${server.port}/ping
+#       health-check-interval: 10s
+#     config:
+#       fail-fast: true
+#       import-check:
+#         enabled: false
+#     host: localhost
+#     port: 8500
+#   application:
+#     name: churiservices-articles
+
 #spring.jpa.show-sql=true
 #spring.jpa.properties.hibernate.format_sql=true
 
