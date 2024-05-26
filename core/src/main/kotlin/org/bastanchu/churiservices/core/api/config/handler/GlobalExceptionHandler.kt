@@ -13,7 +13,7 @@ abstract class GlobalExceptionHandler() : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(ServiceException::class)
     fun handleServiceException(e : ServiceException) : ProblemDetail {
-        val problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.message)
+        val problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.message!!)
         problemDetail.title = "Service Exception"
         problemDetail.type = getTypeURI()
         problemDetail.setProperty("timestamp", Instant.now())
@@ -22,7 +22,7 @@ abstract class GlobalExceptionHandler() : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(ItemNotFoundException::class)
     fun handleItemNotFoundException(e : ItemNotFoundException) : ProblemDetail {
-        val problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.message)
+        val problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.message!!)
         problemDetail.title = "Item Not Found Exception"
         problemDetail.type = getTypeURI()
         problemDetail.setProperty("timestamp", Instant.now())
