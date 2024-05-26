@@ -1,0 +1,60 @@
+management:
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+
+jdbc:
+  churierpweb:
+    driver: org.postgresql.Driver
+
+server:
+  port: 7082
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:6962/churiservices_deliveries
+    username: churiservices_deliveries
+    password: angel7
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8000/auth/realms/ChuriservicesRealm/protocol/openid-connect/certs
+# cloud:
+#   consul:
+#     discovery:
+#       service-name: churiservices-articles
+#       instance-id: churiservices-articles
+#       enabled: true
+#       register: true
+#       prefer-ip-address: true
+#       register-health-check: true
+#       prefer-agent-address: true
+#       health-check-url: http://localhost:${server.port}/ping
+#       health-check-interval: 10s
+#     config:
+#       fail-fast: true
+#       import-check:
+#         enabled: false
+#     host: localhost
+#     port: 8500
+#   application:
+#     name: churiservices-articles
+
+#spring.jpa.show-sql=true
+#spring.jpa.properties.hibernate.format_sql=true
+
+#spring.jpa.properties.hibernate.dialect= org.hibernate.dialect.PostgreSQLDialect
+
+org:
+  bastanchu:
+    churiservices:
+      timestampFormat: yyyy-MM-dd HH:mm:ss Z
+      system:
+        baseTokenURL: http://localhost:8000/auth/realms/ChuriservicesRealm//protocol/openid-connect/token
+      deliveries:
+        systemName: churiservices-deliveries
+        systemVersion: @project.version@
+        dbSystemName: churiservices-deliveries-db
+

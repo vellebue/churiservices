@@ -33,14 +33,30 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
     networks:
       - churisevices-net
- # churiservices-articles:
- #   image: articles:1.0-SNAPSHOT
- #   ports:
- #     - 7081:7081
- #   expose:
- #     - "7081"
- #   networks:
- #     - churisevices-net
+  # churiservices-articles:
+  #   image: articles:1.0-SNAPSHOT
+  #   ports:
+  #     - 7081:7081
+  #   expose:
+  #     - "7081"
+  #   networks:
+  #     - churisevices-net
+  #DELIVERIES
+  churiservices-deliveries-db:
+    image: postgres:latest
+    volumes:
+      - churiservices-deliveries-db-volume:/var/lib/postgresql/data
+    ports:
+      - 6962:5432
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_DB: churiservices_deliveries
+      POSTGRES_USER: churiservices_deliveries
+      POSTGRES_PASSWORD: angel7
+      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - churisevices-net
   #--SYSTEM--
   #KEYCLOAK
   churiservices-system-keycloak-db:
@@ -128,6 +144,7 @@ services:
 volumes:
   churiservices-orders-db-volume:
   churiservices-articles-db-volume:
+  churiservices-deliveries-db-volume:
   churiservices-system-keycloak-db-volume:
 networks:
   churisevices-net:
