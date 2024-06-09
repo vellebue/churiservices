@@ -4,14 +4,18 @@ import org.bastanchu.churiservices.core.api.model.orders.OrderHeader
 import org.bastanchu.churiservices.orders.internal.dao.*
 import org.bastanchu.churiservices.orders.internal.entity.RegionPK
 import org.bastanchu.churiservices.orders.internal.service.OrderService
+import org.bastanchu.churiservices.orders.internal.service.OrdersQueueSenderService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.core.env.Environment
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional(value = "transactionManager", propagation = Propagation.REQUIRED)
-class OrderServiceImpl(@Autowired val orderHeaderDao : OrderHeaderDao,
+class OrderServiceImpl(@Autowired val ordersQueueSenderService: OrdersQueueSenderService,
+                       @Autowired val environment: Environment,
+                       @Autowired val orderHeaderDao : OrderHeaderDao,
                        @Autowired val orderLineDao : OrderLineDao,
                        @Autowired val addressDao: AddressDao,
                        @Autowired val countryDao: CountryDao,
@@ -29,6 +33,8 @@ class OrderServiceImpl(@Autowired val orderHeaderDao : OrderHeaderDao,
             numLine++
             orderHeaderEntity.lines.add(orderLineEntity)
         }
+        ordersQueueSenderService.send(environment.getProperty("org.bastanchu.churiservices.rabbitmq.routingkeys.orderstodeliveries")!!
+            ,order)
         orderHeaderDao.toValueObject(orderHeaderEntity, order)
     }
 

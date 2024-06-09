@@ -81,7 +81,7 @@ abstract class BaseSystemServiceImpl() : BaseSystemService {
     }
 
     override fun getCurrentCorrelationId(): String {
-        val requestAttributes = RequestContextHolder.getRequestAttributes()
+        val requestAttributes = RequestContextHolder.getRequestAttributes()!!
         val correlationId = requestAttributes
             .getAttribute(Slf4jInterceptor.correlationIdLogAttribute, RequestAttributes.SCOPE_REQUEST) as String? ?: ""
         return correlationId

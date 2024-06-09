@@ -16,6 +16,11 @@ spring:
     url: jdbc:postgresql://localhost:6962/churiservices_deliveries
     username: churiservices_deliveries
     password: angel7
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
   security:
     oauth2:
       resourceserver:

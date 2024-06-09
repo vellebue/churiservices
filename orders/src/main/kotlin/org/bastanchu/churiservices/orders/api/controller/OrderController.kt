@@ -149,6 +149,7 @@ class OrderController(@Autowired val orderService : OrderService,
     @PostMapping("/orders/order")
     @ResponseStatus(HttpStatus.CREATED)
     fun createOrder(@org.springframework.web.bind.annotation.RequestBody orderHeader: OrderHeader): OrderHeader {
+        logger.info("Creating order with customer order id ${orderHeader.customerOrderId}")
         orderService.createOrder(orderHeader)
         return orderHeader
     }

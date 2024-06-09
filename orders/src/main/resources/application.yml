@@ -16,6 +16,11 @@ spring:
     url: jdbc:postgresql://localhost:6960/churiservices_orders
     username: churiservices_orders
     password: angel7
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
   security:
     oauth2:
       resourceserver:
@@ -55,6 +60,13 @@ org:
       timestampFormat: yyyy-MM-dd HH:mm:ss Z
       system:
         baseTokenURL: http://localhost:8000/auth/realms/ChuriservicesRealm//protocol/openid-connect/token
+      rabbitmq:
+        exchanges:
+          orders: org.bastanchu.churiservices.orders.ordersExchange
+        queues:
+          orderstodeliveries: org.bastanchu.churiservices.orders.orderstodeliveriesQueue
+        routingkeys:
+          orderstodeliveries: org.bastanchu.churiservices.orders.orderstodeliveriesRoutingKey
       orders:
         systemName: churiservices-orders
         systemVersion: @project.version@

@@ -26,7 +26,7 @@ class Slf4jInterceptor : HandlerInterceptor {
         response.setHeader(transactionIdHeader, transactionId)
         MDC.put(correlationIdLogAttribute, correlationId)
         MDC.put(transactionIdLogAttribute, transactionId)
-        val requestAttributes = RequestContextHolder.getRequestAttributes()
+        val requestAttributes = RequestContextHolder.getRequestAttributes()!!
         requestAttributes.setAttribute(correlationIdLogAttribute, correlationId, RequestAttributes.SCOPE_REQUEST)
         requestAttributes.setAttribute(transactionIdLogAttribute, transactionId, RequestAttributes.SCOPE_REQUEST)
         return true
