@@ -58,6 +58,9 @@ org:
       timestampFormat: yyyy-MM-dd HH:mm:ss Z
       system:
         baseTokenURL: http://localhost:8000/auth/realms/ChuriservicesRealm//protocol/openid-connect/token
+      rabbitmq:
+        queues:
+          orderstodeliveries: org.bastanchu.churiservices.orders.orderstodeliveriesQueue
       deliveries:
         systemName: churiservices-deliveries
         systemVersion: @project.version@

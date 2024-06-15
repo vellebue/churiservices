@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 
-open class MainDBITCase(@Autowired protected val applicationContext : ApplicationContext) : BaseITCase() {
+abstract class MainDBITCase(@Autowired protected val applicationContext : ApplicationContext) : BaseITCase() {
 
     val logger = LoggerFactory.getLogger(MainDBITCase::class.java)
 
@@ -49,5 +49,7 @@ open class MainDBITCase(@Autowired protected val applicationContext : Applicatio
             }
         }
     }
+
+    abstract fun shouldTestFullSystemPingStatusCorrectly();
 
 }

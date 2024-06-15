@@ -1,17 +1,17 @@
-package org.bastanchu.churiservices.articles
+package org.bastanchu.churiservices.deliveries;
 
-import org.bastanchu.churiservices.articles.internal.service.SystemService
 import org.bastanchu.churiservices.coretest.api.test.MainDBITCase
+import org.bastanchu.churiservices.deliveries.internal.service.SystemService;
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.ApplicationContext
-import org.springframework.core.env.Environment
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 
-class ArticlesDBITCase(@Autowired val environment: Environment,
-                       @Autowired val thisApplicationContext : ApplicationContext,
-                       @Autowired val systemService : SystemService
+import org.junit.jupiter.api.Assertions.*
+
+public class DeliveriesDBITCase(@Autowired val environment:Environment,
+                                @Autowired val thisApplicationContext :ApplicationContext,
+                                @Autowired val systemService :SystemService
 ) : MainDBITCase(thisApplicationContext) {
 
     @Test
@@ -33,14 +33,14 @@ class ArticlesDBITCase(@Autowired val environment: Environment,
     }
 
     fun retrieveComponentName() : String {
-        return environment.getProperty("org.bastanchu.churiservices.articles.systemName") ?: ""
+        return environment.getProperty("org.bastanchu.churiservices.deliveries.systemName") ?: ""
     }
 
     fun retrieveSystemVersion() : String {
-        return environment.getProperty("org.bastanchu.churiservices.articles.systemVersion") ?: ""
+        return environment.getProperty("org.bastanchu.churiservices.deliveries.systemVersion") ?: ""
     }
 
     fun retrieveComponentDbName() : String {
-        return environment.getProperty("org.bastanchu.churiservices.articles.dbSystemName") ?: ""
+        return environment.getProperty("org.bastanchu.churiservices.deliveries.dbSystemName") ?: ""
     }
 }

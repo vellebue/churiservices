@@ -24,6 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.junit.jupiter.Container
+import org.testcontainers.containers.RabbitMQContainer
 import java.util.*
 import javax.sql.DataSource
 
@@ -38,6 +39,12 @@ import javax.sql.DataSource
 abstract class BaseITCase {
 
     class MyPostgresqlContainer(dockerImageName : String) : PostgreSQLContainer<MyPostgresqlContainer>(dockerImageName)
+
+    class MyRabbitMQContainer(dockerImageName : String) : RabbitMQContainer(dockerImageName) {
+
+        var outerPort : Int = 0
+
+    }
 
     private val logger = LoggerFactory.getLogger(BaseITCase::class.java)
     @Autowired
@@ -70,6 +77,26 @@ abstract class BaseITCase {
             }
         }
 
+        @Container
+        @JvmField
+        val rabbitMQContainer = MyRabbitMQContainer("rabbitmq:3.13.3-management").apply {
+            val innerPort = 5672
+            val outerPort = nextCurrentExposedPort()
+            this.outerPort = outerPort
+            withReuse(true)
+            withExposedPorts(innerPort)
+            withCreateContainerCmdModifier { cmd ->
+                cmd.withHostConfig(
+                    HostConfig().withPortBindings(
+                        PortBinding(
+                            Ports.Binding.bindPort(outerPort),
+                            ExposedPort(innerPort)
+                        )
+                    )
+                )
+            }
+        }
+
         fun nextCurrentExposedPort() : Int {
             return currentExposedPort++
         }
@@ -81,7 +108,11 @@ abstract class BaseITCase {
                     "spring.datasource.url=" + postgreSQLContainer.getJdbcUrl(),
                     "spring.datasource.username=" + postgreSQLContainer.getUsername(),
                     "spring.datasource.password=" + postgreSQLContainer.getPassword(),
-                    "testcontainers.reuse.enable=true"
+                    "testcontainers.reuse.enable=true",
+                    "spring.rabbitmq.host=" + rabbitMQContainer.host,
+                    "spring.rabbitmq.port=" + rabbitMQContainer.outerPort,
+                    "spring.rabbitmq.username=guest",
+                    "spring.rabbitmq.password=guest"
                 ).applyTo(applicationContext.getEnvironment());
             }
         }

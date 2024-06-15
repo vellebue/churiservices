@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+    <property name="LOG_ROOT" value="." />
+    <property name="LOG_FILE_NAME" value="churiservices-articles" />
+    <property name="SYSTEM_NAME" value="articles"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>[%highlight(%-5level)] %d{HH:mm:ss.SSS} [%-15(${SYSTEM_NAME})] [%X{correlationId}]  %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_ROOT}/${LOG_FILE_NAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_ROOT}/${LOG_FILE_NAME}-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>100GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%highlight(%-5level)] %d{HH:mm:ss.SSS} [%X{correlationId}]  %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <http>
+            <url>http://localhost:3100/loki/api/v1/push</url>
+        </http>
+        <format>
+            <label>
+                <pattern>app=churiservices-articles,environment=dev</pattern>
+            </label>
+            <message>
+                <pattern>[%highlight(%-5level)] %d{HH:mm:ss.SSS} [%-15(${SYSTEM_NAME})] [%X{correlationId}]  %logger{36} - %msg%n</pattern>
+            </message>
+        </format>
+    </appender-->
+
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+        <!--appender-ref ref="LOKI" /-->
+    </root>
+</configuration>
