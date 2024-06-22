@@ -13,14 +13,14 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:6961/churiservices_articles
-    username: churiservices_articles
-    password: angel7
+    url: ${ARTICLES_APP_JDBC_URL}
+    username: ${ARTICLES_APP_DB_USERNAME}
+    password: ${ARTICLES_APP_DB_PASSWORD}
   security:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://localhost:8000/auth/realms/ChuriservicesRealm/protocol/openid-connect/certs
+          jwk-set-uri: ${DEFAULT_JWT_URL}
 # cloud:
 #   consul:
 #     discovery:

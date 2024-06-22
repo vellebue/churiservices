@@ -13,9 +13,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:6960/churiservices_orders
-    username: churiservices_orders
-    password: angel7
+    url: ${ORDERS_APP_JDBC_URL}
+    username: ${ORDERS_APP_DB_USERNAME}
+    password: ${ORDERS_APP_DB_PASSWORD}
   rabbitmq:
     host: localhost
     port: 5672
@@ -25,7 +25,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://localhost:8000/auth/realms/ChuriservicesRealm/protocol/openid-connect/certs
+          jwk-set-uri: ${DEFAULT_JWT_URL}
 # cloud:
 #   consul:
 #     discovery:

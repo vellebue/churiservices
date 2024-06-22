@@ -7,14 +7,14 @@ services:
     volumes:
       - churiservices-orders-db-volume:/var/lib/postgresql/data
     ports:
-      - 6960:5432
+      - ${ORDERS_POSTGRES_DB_OUTER_PORT}:5432
     expose:
       - "5432"
     environment:
-      POSTGRES_DB: churiservices_orders
-      POSTGRES_USER: churiservices_orders
-      POSTGRES_PASSWORD: angel7
-      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: ${ORDERS_POSTGRES_DB}
+      POSTGRES_USER: ${ORDERS_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${ORDERS_POSTGRES_PASSWORD}
+      PGDATA: ${DEFAULT_PGDATA_DIR}
     networks:
       - churisevices-net
   #ARTICLES
@@ -23,14 +23,14 @@ services:
     volumes:
       - churiservices-articles-db-volume:/var/lib/postgresql/data
     ports:
-      - 6961:5432
+      - ${ARTICLES_POSTGRES_DB_OUTER_PORT}:5432
     expose:
       - "5432"
     environment:
-      POSTGRES_DB: churiservices_articles
-      POSTGRES_USER: churiservices_articles
-      POSTGRES_PASSWORD: angel7
-      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: ${ARTICLES_POSTGRES_DB}
+      POSTGRES_USER: ${ARTICLES_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${ARTICLES_POSTGRES_PASSWORD}
+      PGDATA: ${DEFAULT_PGDATA_DIR}
     networks:
       - churisevices-net
   # churiservices-articles:
@@ -47,14 +47,14 @@ services:
     volumes:
       - churiservices-deliveries-db-volume:/var/lib/postgresql/data
     ports:
-      - 6962:5432
+      - ${DELIVERIES_POSTGRES_DB_OUTER_PORT}:5432
     expose:
       - "5432"
     environment:
-      POSTGRES_DB: churiservices_deliveries
-      POSTGRES_USER: churiservices_deliveries
-      POSTGRES_PASSWORD: angel7
-      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: ${DELIVERIES_POSTGRES_DB}
+      POSTGRES_USER: ${DELIVERIES_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${DELIVERIES_POSTGRES_PASSWORD}
+      PGDATA: ${DEFAULT_PGDATA_DIR}
     networks:
       - churisevices-net
   #--SYSTEM--
