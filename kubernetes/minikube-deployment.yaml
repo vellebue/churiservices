@@ -1,0 +1,194 @@
+#KUBERNETES NAMESPACE
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devel
+---
+#KUBERNETES INGRESS
+# To enable nginx ingress load balancer under minikube use: minikube addons enable ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: churiservices-ingress
+  namespace: devel
+#  annotations:
+#    nginx.ingress.kubernetes.io/use-regex: "true"
+#    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: churiservices.example
+      http:
+        paths:
+          - path: /auth
+            pathType: Prefix
+            backend:
+              service:
+                name: keycloak-service
+                port:
+                  number: 8080
+---
+######################
+# SYSTEM COMPONENTS
+######################
+#KEYCLOAK
+#Keycloak persistent volume
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: keycloak-postgresql-persistent-volume
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 500Mi
+  hostPath:
+    path: "/home/angel/tmp/data/devel/servspv0001/"
+---
+#Keycloak Persistent Volume Claim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: keycloak-postgresql-persistent-volume-claim
+  namespace: devel
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+  selector:
+    matchLabels:
+      name: keycloak-postgresql-persistent-volume
+---
+#Keycloak Postgresql database
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak-ddbb
+  namespace: devel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak-ddbb
+      namespace: devel
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      name: keycloak-ddbb
+      namespace: devel
+      labels:
+        app: keycloak-ddbb
+        namespace: devel
+    spec:
+      volumes:
+        - name: keycloak-ddbb-volume-container
+          persistentVolumeClaim:
+            claimName: keycloak-postgresql-persistent-volume-claim
+      containers:
+        - name: keycloak-ddbb
+          image: postgres:latest
+          env:
+            - name: POSTGRES_DB
+              value: keycloak
+            - name: POSTGRES_USER
+              value: keycloak
+            - name: POSTGRES_PASSWORD
+              value: password
+            - name: PGDATA
+              value: "/var/lib/postgresql/data/pgdata"
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: "/var/lib/postgresql/data"
+              name: keycloak-ddbb-volume-container
+---
+#Keycloak postgresql database service
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-ddbb-service
+  namespace: devel
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+      protocol: TCP
+      targetPort: 5432
+  selector:
+    app: keycloak-ddbb
+    namespace: devel
+---
+#Keycloak app
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  namespace: devel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+      namespace: devel
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      name: keycloak
+      namespace: devel
+      labels:
+        app: keycloak
+        namespace: devel
+    spec:
+      containers:
+        - name: keycloak
+          image: bitnami/keycloak:latest
+          env:
+            - name: KEYCLOAK_DATABASE_VENDOR
+              value: postgresql
+            - name: KEYCLOAK_DATABASE_HOST
+              value: keycloak-ddbb-service.devel.svc.cluster.local
+            - name: KEYCLOAK_DATABASE_NAME
+              value: keycloak
+            - name: KEYCLOAK_DATABASE_USER
+              value: keycloak
+            - name:  KEYCLOAK_DATABASE_PASSWORD
+              value: password
+            - name: KEYCLOAK_DATABASE_SCHEMA
+              value: public
+            - name: KEYCLOAK_ADMIN
+              value: admin
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              value : Pa55w0rd
+            - name: KC_HTTP_RELATIVE_PATH
+              value: /auth
+          ports:
+            - containerPort: 8080
+---
+#Keycloak app service
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-service
+  namespace: devel
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: keycloak
+    namespace: devel
