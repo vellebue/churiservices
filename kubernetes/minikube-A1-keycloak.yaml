@@ -1,36 +1,3 @@
-#KUBERNETES NAMESPACE
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: devel
----
-#KUBERNETES INGRESS
-# To enable nginx ingress load balancer under minikube use: minikube addons enable ingress
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: churiservices-ingress
-  namespace: devel
-#  annotations:
-#    nginx.ingress.kubernetes.io/use-regex: "true"
-#    nginx.ingress.kubernetes.io/rewrite-target: /$1
-spec:
-  ingressClassName: nginx
-  rules:
-    - host: churiservices.example
-      http:
-        paths:
-          - path: /auth
-            pathType: Prefix
-            backend:
-              service:
-                name: keycloak-service
-                port:
-                  number: 8080
----
-######################
-# SYSTEM COMPONENTS
-######################
 #KEYCLOAK
 #Keycloak persistent volume
 apiVersion: v1

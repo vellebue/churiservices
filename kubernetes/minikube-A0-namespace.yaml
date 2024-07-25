@@ -1,0 +1,8 @@
+######################
+# MAIN CONFIGURATION
+######################
+#KUBERNETES NAMESPACE
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devel

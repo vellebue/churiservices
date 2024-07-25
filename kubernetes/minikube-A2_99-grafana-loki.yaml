@@ -1,0 +1,175 @@
+##################
+# GRAFANA & LOKI
+##################
+# LOKI
+# loki persistent volume
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: loki-persistent-volume
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 500Mi
+  hostPath:
+    path: "/home/angel/tmp/data/devel/servspv0002/"
+---
+# loki persistent volume claim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: loki-persistent-volume-claim
+  namespace: devel
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+  selector:
+    matchLabels:
+      name: loki-persistent-volume
+---
+# loki deployment
+# TODO configure config file and args reference to that config file
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki
+  namespace: devel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki
+      namespace: devel
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      name: loki
+      namespace: devel
+      labels:
+        app: loki
+        namespace: devel
+    spec:
+      volumes:
+        - name: loki-storage-volume-container
+          persistentVolumeClaim:
+            claimName: loki-persistent-volume-claim
+        - name: loki-config-map-volume-container
+          configMap:
+            name: loki-config-map
+      containers:
+        - name: loki
+          image: grafana/loki:2.9.2
+          ports:
+            - containerPort: 3100
+          volumeMounts:
+            - mountPath: "/tmp/loki"
+              name: loki-storage-volume-container
+            - mountPath: "/etc/loki/local-config.yaml"
+              name: loki-config-map-volume-container
+              subPath: "local-config.yaml"
+---
+#loki service
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-service
+  namespace: devel
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3100
+      protocol: TCP
+      targetPort: 3100
+  selector:
+    app: loki
+    namespace: devel
+---
+#GRAFANA
+#grafana deployment
+# TODO configure config file to define subpath /grafana
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: devel
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: grafana
+      namespace: devel
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      name: grafana
+      namespace: devel
+      labels:
+        app: grafana
+        namespace: devel
+    spec:
+      containers:
+        - name: grafana
+          image: grafana/grafana:10.1.10-ubuntu
+          env:
+            - name: GF_PATHS_PROVISIONING
+              value: /etc/grafana/provisioning
+            - name: GF_AUTH_ANONYMOUS_ENABLED
+              value: "true"
+            - name: GF_AUTH_ANONYMOUS_ORG_ROLE
+              value: Admin
+            - name: GF_SERVER_ROOT_URL
+              value: "http://localhost:3000/grafana"
+            - name: GF_SERVER_SERVE_FROM_SUB_PATH
+              value: "true"
+          command: ["sh"]
+          args:
+            - -euc
+            - |
+              mkdir -p /etc/grafana/provisioning/datasources
+              cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
+              apiVersion: 1
+              datasources:
+              - name: Loki
+                type: loki
+                access: proxy 
+                orgId: 1
+                url: http://loki-service.devel.svc.cluster.local:3100
+                basicAuth: false
+                isDefault: true
+                version: 1
+                editable: false
+              EOF
+              /run.sh
+          ports:
+            - containerPort: 3000
+---
+#grafana service
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-service
+  namespace: devel
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+      protocol: TCP
+      targetPort: 3000
+  selector:
+    app: grafana
+    namespace: devel

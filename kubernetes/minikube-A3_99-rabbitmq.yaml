@@ -1,0 +1,153 @@
+# RABBITMQ
+# rabbit mq persistence volume
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: rabbitmq-persitent-volume
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 200Mi
+  hostPath:
+    path: "/home/angel/tmp/data/devel/servspv0010/"
+---
+# rabbit mq persistence volume claim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rabbitmq-persitent-volume-claim
+  namespace: devel
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 200Mi
+  selector:
+    matchLabels:
+      name: rabbitmq-persitent-volume
+---
+# rabbit mq app
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq
+  namespace: devel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq
+      namespace: devel
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      name: rabbitmq
+      namespace: devel
+      labels:
+        app: rabbitmq
+        namespace: devel
+    spec:
+      volumes:
+        - name: rabbitmq-volume-container
+          persistentVolumeClaim:
+            claimName: rabbitmq-persitent-volume-claim
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:3.13.3-management
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              value: admin
+            - name: RABBITMQ_DEFAULT_PASS
+              value: admin
+            - name: RABBITMQ_DEFAULT_VHOST
+              value: "/"
+          ports:
+            - containerPort: 5672
+            - containerPort: 15672
+          volumeMounts:
+            - mountPath: "/var"
+              name: rabbitmq-volume-container
+---
+#rabbitmq inner service
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-inner-service
+  namespace: devel
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5672
+      protocol: TCP
+      targetPort: 5672
+      name: apmq
+    - port: 15672
+      protocol: TCP
+      targetPort: 15672
+      name: http
+  selector:
+    app: rabbitmq
+    namespace: devel
+---
+# rabbitmq nginx reverse proxy
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-rabbitmq-reverse-proxy
+  namespace: devel
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-rabbitmq-reverse-proxy
+      namespace: devel
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: nginx-rabbitmq-reverse-proxy
+        namespace: devel
+    spec:
+      volumes:
+        - name: reverse-proxy-config-map-volume-container
+          configMap:
+            name: mqrabbit-reverse-proxy-config-map
+      containers:
+        - name: nginx-rabbitmq-reverse-proxy
+          image: nginx:1.17
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: "/etc/nginx/nginx.conf"
+              name: reverse-proxy-config-map-volume-container
+              subPath: "nginx.conf"
+---
+# rabbitmq service
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-service
+  namespace: devel
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+      name: http
+  selector:
+    app: nginx-rabbitmq-reverse-proxy
+    namespace: devel
