@@ -146,7 +146,7 @@ spec:
   ports:
     - port: 8080
       protocol: TCP
-      targetPort: 8080
+      targetPort: 80
       name: http
   selector:
     app: nginx-rabbitmq-reverse-proxy
