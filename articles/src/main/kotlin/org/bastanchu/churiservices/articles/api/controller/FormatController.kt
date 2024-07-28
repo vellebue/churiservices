@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import org.bastanchu.churiservices.articles.internal.service.FormatService
 import org.bastanchu.churiservices.core.api.model.GenericResponse
 import org.bastanchu.churiservices.core.api.model.article.Format
+import org.slf4j.LoggerFactory
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.env.Environment
@@ -25,6 +26,8 @@ import java.util.*
 @RestController
 class FormatController(@Autowired val formatService: FormatService,
                        @Autowired val environment: Environment) {
+
+    val logger = LoggerFactory.getLogger(FormatController::class.java)
 
     @Operation(
         summary = "Creates an article format for articles.",
@@ -60,6 +63,7 @@ class FormatController(@Autowired val formatService: FormatService,
     @PostMapping("/formats/format")
     @ResponseStatus(HttpStatus.CREATED)
     fun createFormat(@org.springframework.web.bind.annotation.RequestBody format : Format) : Format {
+        logger.info("Creating format ${format.formatId}")
         formatService.createFormat(format)
         return format
     }
@@ -101,6 +105,7 @@ class FormatController(@Autowired val formatService: FormatService,
     @GetMapping("/formats/format/{formatId}")
     @ResponseStatus(HttpStatus.OK)
     fun getFormat(@PathVariable formatId : String) : ResponseEntity<Any> {
+        logger.info("Retrieving data for format id ${formatId}")
         val format = formatService.getFormat(formatId)
         if (format != null) {
             return ResponseEntity(format, HttpStatus.OK)
@@ -141,6 +146,7 @@ class FormatController(@Autowired val formatService: FormatService,
                ])
     @GetMapping("/formats")
     fun getFormatsSet() : List<Format> {
+        logger.info("Retrieving all formats list")
         val formats = formatService.getFormats()
         return formats
     }
