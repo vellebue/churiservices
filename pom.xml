@@ -12,6 +12,7 @@
         <module>orders</module>
         <module>articles</module>
         <module>deliveries</module>
+        <module>storage</module>
     </modules>
     <packaging>pom</packaging>
     <properties>

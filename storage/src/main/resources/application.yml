@@ -1,0 +1,42 @@
+management:
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+
+jdbc:
+  churierpweb:
+    driver: org.postgresql.Driver
+
+server:
+  port: 7083
+
+spring:
+  datasource:
+    url: ${STORAGE_APP_JDBC_URL}
+    username: ${STORAGE_APP_DB_USERNAME}
+    password: ${STORAGE_APP_DB_PASSWORD}
+#  rabbitmq:
+#    host: localhost
+#    port: 5672
+#    username: admin
+#    password: admin
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          jwk-set-uri: ${DEFAULT_JWT_URL}
+
+#org:
+#  bastanchu:
+#    churiservices:
+#      timestampFormat: yyyy-MM-dd HH:mm:ss Z
+#      system:
+#        baseTokenURL: http://localhost:8000/auth/realms/ChuriservicesRealm//protocol/openid-connect/token
+#      rabbitmq:
+#        queues:
+#          orderstodeliveries: org.bastanchu.churiservices.orders.orderstodeliveriesQueue
+#      deliveries:
+#        systemName: churiservices-deliveries
+#        systemVersion: @project.version@
+#        dbSystemName: churiservices-deliveries-db

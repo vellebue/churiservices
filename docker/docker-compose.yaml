@@ -57,6 +57,23 @@ services:
       PGDATA: ${DEFAULT_PGDATA_DIR}
     networks:
       - churisevices-net
+  #STORAGE
+  # TODO Configure storage for docker
+  churiservices-storage-db:
+    image: postgres:latest
+    volumes:
+      - churiservices-storage-db-volume:/var/lib/postgresql/data
+    ports:
+      - ${STORAGE_POSTGRES_DB_OUTER_PORT}:5432
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_DB: ${STORAGE_POSTGRES_DB}
+      POSTGRES_USER: ${STORAGE_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${STORAGE_POSTGRES_PASSWORD}
+      PGDATA: ${DEFAULT_PGDATA_DIR}
+    networks:
+      - churisevices-net
   #--SYSTEM--
   #KEYCLOAK
   churiservices-system-keycloak-db:
@@ -143,6 +160,7 @@ volumes:
   churiservices-orders-db-volume:
   churiservices-articles-db-volume:
   churiservices-deliveries-db-volume:
+  churiservices-storage-db-volume:
   churiservices-system-keycloak-db-volume:
   churiservices-system-grafana-volume:
 networks:
