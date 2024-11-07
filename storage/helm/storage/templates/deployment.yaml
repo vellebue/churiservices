@@ -40,6 +40,24 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+          env:
+            - name: STORAGE_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-{{ .Release.Name }}-secret
+                  key: database-name
+            - name: STORAGE_APP_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-{{ .Release.Name }}-secret
+                  key: database-user
+            - name: STORAGE_APP_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-{{ .Release.Name }}-secret
+                  key: database-password
+            - name: STORAGE_APP_JDBC_URL
+              value: jdbc:postgresql://db-{{ .Chart.Name }}-{{ .Release.Name }}-cluster.{{ .Release.Namespace }}.svc.cluster.local:5432/$(STORAGE_DB_NAME)
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:

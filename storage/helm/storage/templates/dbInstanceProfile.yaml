@@ -1,0 +1,8 @@
+apiVersion: stackgres.io/v1
+kind: SGInstanceProfile
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: db-{{ .Chart.Name }}-{{ .Release.Name }}-instance-profile
+spec:
+  cpu: {{ .Values.database.resources.cpu }}
+  memory: {{ .Values.database.resources.memory }}

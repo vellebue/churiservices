@@ -121,3 +121,28 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+#Custom fields to configure database
+database:
+  resources:
+    cpu: "200m"
+    memory: "200Mi"
+  config:
+    postgresVersion: "16" # Configure only major version Ex: 16 do not specify minor version Ex: 16.4
+    postgresqlConf:
+      shared_buffers: "512MB"
+      random_page_cost: "1.5"
+      password_encryption: "scram-sha-256"
+      log_checkpoints: "on"
+  poolConf:
+    pgBouncer:
+      pgbouncerIni:
+        pgbouncer:
+          pool_mode: transaction
+          max_client_conn: "10"
+          default_pool_size: "10"
+  cluster:
+    instances: 1
+    version: "16.4" # According to postgresql major version specified before
+    persistentVolume:
+      size: "200Mi"

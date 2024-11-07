@@ -1,0 +1,19 @@
+apiVersion: stackgres.io/v1
+kind: SGCluster
+metadata:
+  name: db-{{ .Chart.Name }}-{{ .Release.Name }}-cluster
+  namespace: {{ .Release.Namespace }}
+spec:
+  instances: {{ .Values.database.cluster.instances }}
+  postgres:
+    version: {{ quote .Values.database.cluster.version }}
+  sgInstanceProfile: db-{{ .Chart.Name }}-{{ .Release.Name }}-instance-profile
+  pods:
+    persistentVolume:
+      size: {{ quote .Values.database.cluster.persistentVolume.size }}
+  configurations:
+    sgPostgresConfig: db-{{ .Chart.Name }}-{{ .Release.Name }}-config
+    sgPoolingConfig: db-{{ .Chart.Name }}-{{ .Release.Name }}-poolconfig
+  managedSql:
+    scripts:
+      - sgScript: db-{{ .Chart.Name }}-{{ .Release.Name }}-scripts
