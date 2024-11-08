@@ -27,16 +27,16 @@ spring:
 #        jwt:
 #          jwk-set-uri: ${DEFAULT_JWT_URL}
 
-#org:
-#  bastanchu:
-#    churiservices:
-#      timestampFormat: yyyy-MM-dd HH:mm:ss Z
+org:
+  bastanchu:
+    churiservices:
+      timestampFormat: yyyy-MM-dd HH:mm:ss Z
 #      system:
 #        baseTokenURL: http://localhost:8000/auth/realms/ChuriservicesRealm//protocol/openid-connect/token
 #      rabbitmq:
 #        queues:
 #          orderstodeliveries: org.bastanchu.churiservices.orders.orderstodeliveriesQueue
-#      deliveries:
-#        systemName: churiservices-deliveries
-#        systemVersion: @project.version@
-#        dbSystemName: churiservices-deliveries-db
+      storage:
+        systemName: churiservices-storage
+        systemVersion: @project.version@
+        dbSystemName: churiservices-storage-db

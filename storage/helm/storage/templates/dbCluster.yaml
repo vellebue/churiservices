@@ -1,4 +1,52 @@
 apiVersion: stackgres.io/v1
+kind: SGInstanceProfile
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: db-{{ .Chart.Name }}-{{ .Release.Name }}-instance-profile
+spec:
+  cpu: {{ .Values.database.resources.cpu }}
+  memory: {{ .Values.database.resources.memory }}
+---
+apiVersion: stackgres.io/v1
+kind: SGPostgresConfig
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: db-{{ .Chart.Name }}-{{ .Release.Name }}-config
+spec:
+  postgresVersion: {{ quote .Values.database.config.postgresVersion }}
+  postgresql.conf:
+    shared_buffers: {{ quote .Values.database.config.postgresqlConf.shared_buffers }}
+    random_page_cost: {{ quote .Values.database.config.postgresqlConf.random_page_cost }}
+    password_encryption: {{ quote .Values.database.config.postgresqlConf.password_encryption }}
+    log_checkpoints: {{ quote .Values.database.config.postgresqlConf.log_checkpoints }}
+---
+apiVersion: stackgres.io/v1
+kind: SGPoolingConfig
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: db-{{ .Chart.Name }}-{{ .Release.Name }}-poolconfig
+spec:
+  pgBouncer:
+    pgbouncer.ini:
+      pgbouncer:
+        max_client_conn: {{ quote .Values.database.poolConf.pgBouncer.pgbouncerIni.pgbouncer.max_client_conn }}
+        default_pool_size: {{ quote .Values.database.poolConf.pgBouncer.pgbouncerIni.pgbouncer.default_pool_size }}
+        pool_mode: {{ quote .Values.database.poolConf.pgBouncer.pgbouncerIni.pgbouncer.pool_mode }}
+---
+apiVersion: stackgres.io/v1
+kind: SGScript
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: db-{{ .Chart.Name }}-{{ .Release.Name }}-scripts
+spec:
+  scripts:
+    - name: create-db-{{ .Chart.Name }}-{{ .Release.Name }}-script
+      scriptFrom:
+        secretKeyRef:
+          name: {{ .Chart.Name }}-{{ .Release.Name }}-secret
+          key: create-database.sql
+---
+apiVersion: stackgres.io/v1
 kind: SGCluster
 metadata:
   name: db-{{ .Chart.Name }}-{{ .Release.Name }}-cluster
