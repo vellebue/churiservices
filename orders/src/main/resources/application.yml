@@ -9,7 +9,7 @@ jdbc:
     driver: org.postgresql.Driver
 
 server:
-  port: 7080
+  port: ${ORDERS_APP_PORT}
 
 spring:
   datasource:
