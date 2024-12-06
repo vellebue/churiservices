@@ -1,0 +1,1 @@
+drop table C_MOVEMENT_TYPES;
