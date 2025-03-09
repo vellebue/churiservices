@@ -112,20 +112,24 @@
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
         <plugins>
-            <!-- echo maven plugin to print messages during maven execution-->
+            <!-- echo maven plugin to print version and container name-->
             <plugin>
-                <groupId>com.github.ekryd.echo-maven-plugin</groupId>
-                <artifactId>echo-maven-plugin</artifactId>
-                <version>1.2.0</version>
-                <configuration>
-                    <message>##teamcity[setParameter name='env.DELIVERIES_VERSION' value='${version}']</message>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
+                        <id>teamcity-set-vars</id>
                         <phase>install</phase>
                         <goals>
-                            <goal>echo</goal>
+                            <goal>run</goal>
                         </goals>
+                        <configuration>
+                            <target>
+                                <echo level="info">##teamcity[setParameter name='env.DELIVERIES_VERSION' value='${version}']"</echo>
+                                <echo level="info">##teamcity[setParameter name='env.DELIVERIES_CONTAINER_NAME' value='org.bastanchu.churiservices/deliveries']</echo>
+                            </target>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
