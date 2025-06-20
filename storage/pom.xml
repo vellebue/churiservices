@@ -127,8 +127,8 @@
                         </goals>
                         <configuration>
                             <target>
-                                <echo level="info">##teamcity[setParameter name='env.DELIVERIES_VERSION' value='${version}']"</echo>
-                                <echo level="info">##teamcity[setParameter name='env.DELIVERIES_CONTAINER_NAME' value='org.bastanchu.churiservices/deliveries']</echo>
+                                <echo level="info">##teamcity[setParameter name='env.STORAGE_VERSION' value='${version}']"</echo>
+                                <echo level="info">##teamcity[setParameter name='env.STORAGE_CONTAINER_NAME' value='org.bastanchu.churiservices/deliveries']</echo>
                             </target>
                         </configuration>
                     </execution>
